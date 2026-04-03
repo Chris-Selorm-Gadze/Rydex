@@ -12,13 +12,19 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const fleet = [
-    { title: "Benz GLC", price: "340", img: "/images/GLC Benz.avif", year: 2024 },
-    { title: "Dodge Hellcat", price: "840", img: "/images/Hellcat.jpg", year: 2024 },
-    { title: "Bentley Spider", price: "4580", img: "/images/bentley.jpeg", year: 2024 },
-    { title: "Bugatti Chiron", price: "8340", img: "/images/bougatti.jpeg", year: 2024 },
-    { title: "BMW M4 Coupe", price: "4166", img: "/images/BMW4.jpeg", year: 2023 }
-  ];
+  const [fleet, setFleet] = useState([]);
+
+  useEffect(() => {
+    // Fetch fleet data from backend
+    fetch('http://localhost:5000/api/fleet')
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          setFleet(data.data);
+        }
+      })
+      .catch(err => console.error("Error fetching fleet:", err));
+  }, []);
 
   return (
     <div className="app-container">
